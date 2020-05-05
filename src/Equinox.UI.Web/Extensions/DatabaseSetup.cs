@@ -1,6 +1,7 @@
 ﻿using System;
 using Equinox.Infra.CrossCutting.Identity.Models;
 using Equinox.Infra.Data.Context;
+using HibernatingRhinos.Profiler.Appender.CosmosDB;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ namespace Equinox.UI.Web.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             var client = new CosmosClient(configuration.GetConnectionString("CosmosDB"));
+            
+            services.UseCosmosDBProfiler(client);
 
             services.AddSingleton(client);
         }

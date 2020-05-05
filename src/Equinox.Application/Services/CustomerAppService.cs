@@ -37,7 +37,8 @@ namespace Equinox.Application.Services
                 .AsEnumerable()
                 .Select(c =>
                 {
-                    c.Orders = _customerRepository.OrdersFor(c.Id).ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider);
+                    //c.Orders = _customerRepository.OrdersFor(c.Id).ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider);
+                    c.OrdersCount = _customerRepository.OrdersCount(c.Id);
                     return c;
                 });
         }

@@ -8,5 +8,7 @@ namespace Equinox.Domain.Interfaces
     {
         Customer GetByEmail(string email);
         IQueryable<Order> OrdersFor(Guid id);
+
+        int OrdersCount(Guid id);
     }
 }

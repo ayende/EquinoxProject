@@ -9,17 +9,19 @@ namespace Equinox.Infra.Data.Repository
     public class CustomerRepository : ICustomerRepository
     {
         private readonly CosmosClient _client;
-        private Container _container;
+        private readonly Container _customersContainer;
+        private readonly Container _ordersContainer;
 
         public CustomerRepository(CosmosClient client)
         {
             _client = client;
-            _container = _client.GetContainer("Equinox","Customers");
+            _customersContainer = _client.GetContainer("Equinox","Customers");
+            _ordersContainer = _client.GetContainer("Equinox", "Orders");
         }
 
         public Customer GetByEmail(string email)
         {
-            return _container.GetItemLinqQueryable<Customer>(allowSynchronousQueryExecution: true)
+            return _customersContainer.GetItemLinqQueryable<Customer>(allowSynchronousQueryExecution: true)
                 .Where(c => c.Email == email)
                 .Take(1)
                 .ToList()
@@ -30,8 +32,16 @@ namespace Equinox.Infra.Data.Repository
         {
             var customerId = id.ToString();
 
-            return _container.GetItemLinqQueryable<Order>(allowSynchronousQueryExecution: true)
+            return _ordersContainer.GetItemLinqQueryable<Order>(allowSynchronousQueryExecution: true)
                 .Where(c => c.CustomerId == customerId);
+        }
+
+        public int OrdersCount(Guid id)
+        {
+            var query = new QueryDefinition(@"SELECT value count(1) FROM root WHERE root.CustomerId = @cust")
+                .WithParameter("@cust", id.ToString());
+            var it = _ordersContainer.GetItemQueryIterator<int>(query);
+            return it.ReadNextAsync().Result.FirstOrDefault();
         }
 
         public void Dispose()
@@ -41,14 +51,14 @@ namespace Equinox.Infra.Data.Repository
 
         public void Add(Customer obj)
         {
-            _container.CreateItemAsync(obj).Wait();
+            _customersContainer.CreateItemAsync(obj).Wait();
         }
 
         public Customer GetById(Guid id)
         {
             try
             {
-                return _container.ReadItemAsync<Customer>(id.ToString(), new PartitionKey(id.ToString())).Result;
+                return _customersContainer.ReadItemAsync<Customer>(id.ToString(), new PartitionKey(id.ToString())).Result;
             }
             catch (Exception e)
             {
@@ -58,17 +68,17 @@ namespace Equinox.Infra.Data.Repository
 
         public IQueryable<Customer> GetAll()
         {
-            return _container.GetItemLinqQueryable<Customer>(allowSynchronousQueryExecution: true);
+            return _customersContainer.GetItemLinqQueryable<Customer>(allowSynchronousQueryExecution: true);
         }
 
         public void Update(Customer obj)
         {
-            _container.UpsertItemAsync(obj).Wait();
+            _customersContainer.UpsertItemAsync(obj).Wait();
         }
 
         public void Remove(Guid id)
         {
-            _container.DeleteItemAsync<Customer>(id.ToString(), PartitionKey.None).Wait();
+            _customersContainer.DeleteItemAsync<Customer>(id.ToString(), PartitionKey.None).Wait();
         }
 
         public int SaveChanges()

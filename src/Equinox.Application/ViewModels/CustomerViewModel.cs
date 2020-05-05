@@ -35,6 +35,6 @@ namespace Equinox.Application.ViewModels
         public IEnumerable<OrderViewModel> Orders { get; set; }
 
         [DisplayName("Number of Orders")]
-        public int OrdersCount => Orders.Count();
+        public int OrdersCount { get; set; }
     }
 }
