@@ -3,6 +3,12 @@ using Equinox.Domain.Core.Models;
 
 namespace Equinox.Domain.Models
 {
+    public class Order
+    {
+        public string CustomerId{ get; set; }
+        // data
+    }
+
     public class Customer : Entity
     {
         public Customer(Guid id, string name, string email, DateTime birthDate)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Equinox.Application.EventSourcedNormalizers;
@@ -32,7 +33,13 @@ namespace Equinox.Application.Services
 
         public IEnumerable<CustomerViewModel> GetAll()
         {
-            return _customerRepository.GetAll().ProjectTo<CustomerViewModel>(_mapper.ConfigurationProvider);
+            return _customerRepository.GetAll().ProjectTo<CustomerViewModel>(_mapper.ConfigurationProvider)
+                .AsEnumerable()
+                .Select(c =>
+                {
+                    c.Orders = _customerRepository.OrdersFor(c.Id).ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider);
+                    return c;
+                });
         }
 
         public CustomerViewModel GetById(Guid id)

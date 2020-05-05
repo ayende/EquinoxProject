@@ -41,6 +41,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.BirthDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders)
+            </th>
             <th></th>
         </tr>
         </thead>
@@ -58,18 +61,21 @@
                     @Html.DisplayFor(modelItem => item.BirthDate)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.OrdersCount)
+                </td>
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" title="Edit" class="btn btn-warning">
                         <span class="fas fa-edit"></span>
                     </a>
-                        
+
                     <a asp-action="Details" asp-route-id="@item.Id" title="Details" class="btn btn-primary">
                         <span class="fas fa-search"></span>
                     </a>
-                        
+
                     <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" class="btn btn-danger">
                         <span class="fas fa-trash-alt"></span>
                     </a>
-                    
+
                     <button type="button" class="btn btn-info viewbutton" title="History" data-id="@item.Id" data-toggle="modal" data-target="#customerHistory">
                         <span class="fas fa-clock"></span>
                     </button>

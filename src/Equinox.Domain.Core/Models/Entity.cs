@@ -1,9 +1,12 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Equinox.Domain.Core.Models
 {
     public abstract class Entity
     {
+        [JsonProperty(PropertyName = "id")]
+
         public Guid Id { get; protected set; }
 
         public override bool Equals(object obj)

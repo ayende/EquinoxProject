@@ -2,6 +2,7 @@
 using Equinox.Infra.CrossCutting.Identity.Models;
 using Equinox.Infra.Data.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,8 +21,9 @@ namespace Equinox.UI.Web.Extensions
             services.AddDbContext<EquinoxContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<EventStoreSqlContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            var client = new CosmosClient(configuration.GetConnectionString("CosmosDB"));
+
+            services.AddSingleton(client);
         }
     }
 }

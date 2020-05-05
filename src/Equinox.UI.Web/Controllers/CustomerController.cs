@@ -52,7 +52,10 @@ namespace Equinox.UI.Web.Controllers
         [Route("customer-management/register-new")]
         public IActionResult Create()
         {
-            return View();
+            return View("Create",new CustomerViewModel
+            {
+                BirthDate = new DateTime(1999, 1, 1)
+            });
         }
 
         [HttpPost]

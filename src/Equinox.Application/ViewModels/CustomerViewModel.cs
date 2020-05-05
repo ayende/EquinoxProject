@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Equinox.Application.ViewModels
 {
+    public class OrderViewModel
+    {
+
+    }
     public class CustomerViewModel
     {
         [Key]
@@ -25,5 +31,10 @@ namespace Equinox.Application.ViewModels
         [DataType(DataType.Date, ErrorMessage = "Data em formato inválido")]
         [DisplayName("Birth Date")]
         public DateTime BirthDate { get; set; }
+
+        public IEnumerable<OrderViewModel> Orders { get; set; }
+
+        [DisplayName("Number of Orders")]
+        public int OrdersCount => Orders.Count();
     }
 }

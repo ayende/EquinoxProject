@@ -53,9 +53,8 @@ namespace Equinox.Infra.CrossCutting.IoC
             services.AddScoped<EquinoxContext>();
 
             // Infra - Data EventSourcing
-            services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
-            services.AddScoped<IEventStore, SqlEventStore>();
-            services.AddScoped<EventStoreSqlContext>();
+            services.AddScoped<IEventStoreRepository, CosmosEventStoreRepository>();
+            services.AddScoped<IEventStore, CosmosEventStore>();
 
             // Infra - Identity
             services.AddScoped<IUser, AspNetUser>();

@@ -7,8 +7,8 @@ namespace Equinox.Domain.Core.Events
         public StoredEvent(Event theEvent, string data, string user)
         {
             Id = Guid.NewGuid();
-            AggregateId = theEvent.AggregateId;
-            MessageType = theEvent.MessageType;
+            AggregateId = theEvent?.AggregateId ?? Guid.Empty;
+            MessageType = theEvent?.MessageType;
             Data = data;
             User = user;
         }
@@ -17,6 +17,8 @@ namespace Equinox.Domain.Core.Events
         protected StoredEvent() { }
 
         public Guid Id { get; private set; }
+
+        public string id => Id.ToString();
 
         public string Data { get; private set; }
 
